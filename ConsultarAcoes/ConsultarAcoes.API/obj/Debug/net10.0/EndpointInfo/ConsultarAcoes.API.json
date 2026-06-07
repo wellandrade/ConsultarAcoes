@@ -1,0 +1,31 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "ConsultarAcoes.API | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5173"
+    }
+  ],
+  "paths": {
+    "/api/ConsultarAcoes/NotificarCarteira": {
+      "post": {
+        "tags": [
+          "ConsultarAcoes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "ConsultarAcoes"
+    }
+  ]
+}

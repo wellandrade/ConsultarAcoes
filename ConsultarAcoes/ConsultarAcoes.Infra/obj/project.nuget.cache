@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "ujzHlNezMdU=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\welli\\OneDrive\\Desktop\\Well\\TI\\ConsultarAcoesAPI\\ConsultarAcoes\\ConsultarAcoes.Infra\\ConsultarAcoes.Infra.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\welli\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\10.0.8\\microsoft.extensions.configuration.abstractions.10.0.8.nupkg.sha512",
+    "C:\\Users\\welli\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.8\\microsoft.extensions.dependencyinjection.abstractions.10.0.8.nupkg.sha512",
+    "C:\\Users\\welli\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.8\\microsoft.extensions.primitives.10.0.8.nupkg.sha512"
+  ],
+  "logs": []
+}

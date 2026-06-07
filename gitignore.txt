@@ -1,0 +1,5 @@
+anotações.txt
+
+.vs/
+bin/
+obj/

@@ -1,0 +1,15 @@
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\bin\Debug\net10.0\ConsultarAcoes.Application.deps.json
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\bin\Debug\net10.0\ConsultarAcoes.Application.dll
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\bin\Debug\net10.0\ConsultarAcoes.Application.pdb
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\bin\Debug\net10.0\ConsultarAcoes.Domain.dll
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\bin\Debug\net10.0\ConsultarAcoes.Domain.pdb
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.csproj.AssemblyReference.cache
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.AssemblyInfoInputs.cache
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.AssemblyInfo.cs
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.csproj.CoreCompileInputs.cache
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\Consulta.3E0D2D66.Up2Date
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.dll
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\refint\ConsultarAcoes.Application.dll
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ConsultarAcoes.Application.pdb
+C:\Users\welli\OneDrive\Desktop\Well\TI\ConsultarAcoesAPI\ConsultarAcoes\ConsultarAcoes.Application\obj\Debug\net10.0\ref\ConsultarAcoes.Application.dll
