@@ -1,0 +1,13 @@
+# Visual Studio
+.vs/
+**/.vs/
+
+# Build .NET
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Anotações locais
+anotações.txt
+anotacoes.txt
