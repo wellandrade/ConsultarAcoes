@@ -1,6 +1,7 @@
 <Solution>
   <Project Path="ConsultarAcoes.API/ConsultarAcoes.API.csproj" />
   <Project Path="ConsultarAcoes.Application/ConsultarAcoes.Application.csproj" />
+  <Project Path="ConsultarAcoes.Function/ConsultarAcoes.Function.csproj" Id="0146619b-ac32-4db8-afd3-69350d47adf4" />
   <Project Path="ConsultarAcoes.Infra/ConsultarAcoes.Infra.csproj" />
   <Project Path="src/ConsultarAcoes.Domain/ConsultarAcoes.Domain.csproj" />
 </Solution>

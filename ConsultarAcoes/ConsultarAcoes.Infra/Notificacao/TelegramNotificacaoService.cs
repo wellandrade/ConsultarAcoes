@@ -8,7 +8,7 @@ namespace ConsultarAcoes.Infra.Notificacao
         private readonly HttpClient _httpClient;
 
         private const string _token = "8532947811:AAHnJSyrzZhnQRt5iBA4EceQ432BnFzzW4U";
-        private const string _chatId = "8708594503";
+        private List<string> _listChatIds = new List<string> { "8708594503", "8961141383" };
 
         public TelegramNotificacaoService()
         {
@@ -17,13 +17,17 @@ namespace ConsultarAcoes.Infra.Notificacao
 
         public async Task EnviarMensagem(string mensagem)
         {
+
             var url = $"https://api.telegram.org/bot{_token}/sendMessage";
 
-            await _httpClient.PostAsJsonAsync(url, new
+            foreach (var chatId in _listChatIds.Where(x => !string.IsNullOrWhiteSpace(x)))
             {
-                chat_id = _chatId,
-                text = mensagem
-            });
+                await _httpClient.PostAsJsonAsync(url, new
+                {
+                    chat_id = chatId,
+                    text = mensagem
+                });
+            }
         }
     }
 }

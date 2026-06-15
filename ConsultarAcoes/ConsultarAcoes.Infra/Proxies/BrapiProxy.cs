@@ -1,4 +1,5 @@
-﻿using ConsultarAcoes.Application.Interfaces.Proxies;
+﻿using ConsultarAcoes.Application.Exceptions;
+using ConsultarAcoes.Application.Interfaces.Proxies;
 using ConsultarAcoes.Domain.Entities;
 using ConsultarAcoes.Infra.Response;
 using System.Net.Http.Headers;
@@ -27,12 +28,13 @@ namespace ConsultarAcoes.Infra.Proxies
         {
             try
             {
-                var url = $"{_baseUrl}/quote/{ticket}";
+                var url = $"{_baseUrl}/quote/{ticket}dasdadsasd";
                 var response = await _httpClient.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception("Erro ao obter cotação.");
+                    return null;
+                    throw new IntegracaoExternaException("Brapi", "Erro ao consultar o ticket", (int)response.StatusCode, null);
                 }
 
                 var conteudo = await response.Content.ReadAsStringAsync();

@@ -1,3 +1,4 @@
+using ConsultarAcoes.API.Middlewares;
 using ConsultarAcoes.Infra.IoC;
 using Scalar.AspNetCore;
 
@@ -10,6 +11,7 @@ builder.Services.AddOpenApi();
 var app = builder.Build();
 app.MapOpenApi();
 app.MapScalarApiReference();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
