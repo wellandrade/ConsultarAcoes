@@ -28,12 +28,11 @@ namespace ConsultarAcoes.Infra.Proxies
         {
             try
             {
-                var url = $"{_baseUrl}/quote/{ticket}dasdadsasd";
+                var url = $"{_baseUrl}/quote/{ticket}";
                 var response = await _httpClient.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return null;
                     throw new IntegracaoExternaException("Brapi", "Erro ao consultar o ticket", (int)response.StatusCode, null);
                 }
 

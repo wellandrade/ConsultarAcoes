@@ -18,21 +18,37 @@ namespace ConsultarAcoes.Function.Function
         [Function("NotificarCotacoesFunction11h")]
         public async Task Executar11h([TimerTrigger("0 30 13 * * 1-5")] TimerInfo timerInfo)
         {
-            _logger.LogInformation("Executanto envio de noticicações");
+            try
+            {
+                _logger.LogInformation("Iniciando execução da Function Notificações | NotificarCotacoesFunction11h");
 
-            await _cotacaoApiClient.NotificarCotacoes();
+                await _cotacaoApiClient.NotificarCotacoes();
 
-            _logger.LogInformation("Enviando notificações de cotações para os usuários...");
+                _logger.LogInformation("API executada com sucesso | NotificarCotacoesFunction11h");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao executar a Function | NotificarCotacoesFunction11h");
+                throw;
+            }
         }
 
         [Function("NotificarCotacoesFunction15h30")]
         public async Task Executar15h30([TimerTrigger("0 30 18 * * 1-5")] TimerInfo timerInfo)
         {
-            _logger.LogInformation("Executanto envio de noticicações");
+            try
+            {
+                _logger.LogInformation("Iniciando execução da Function Notificações | NotificarCotacoesFunction15h30");
 
-            await _cotacaoApiClient.NotificarCotacoes();
+                await _cotacaoApiClient.NotificarCotacoes();
 
-            _logger.LogInformation("Enviando notificações de cotações para os usuários...");
+                _logger.LogInformation("API executada com sucesso | NotificarCotacoesFunction15h30");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao executar a Function | NotificarCotacoesFunction15h30"); throw;
+                throw;
+            }
         }
     }
 }

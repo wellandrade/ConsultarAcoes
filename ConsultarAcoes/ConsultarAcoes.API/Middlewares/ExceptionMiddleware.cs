@@ -1,6 +1,7 @@
 ﻿using ConsultarAcoes.Application.Exceptions;
 using System.Net;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace ConsultarAcoes.API.Middlewares
 {
@@ -19,7 +20,17 @@ namespace ConsultarAcoes.API.Middlewares
         {
             try
             {
+                var watch = Stopwatch.StartNew();
+
                 await _next(context);
+
+                watch.Stop();
+
+                _logger.LogInformation("Http {Method} {Path} respondeu {StatusCode} em {ElapsedMilliseconds}ms",
+                    context.Request.Method,
+                    context.Request.Path,
+                    context.Response.StatusCode,
+                    watch.ElapsedMilliseconds);
             }
             catch (IntegracaoExternaException ex)
             {
@@ -34,7 +45,7 @@ namespace ConsultarAcoes.API.Middlewares
                     statusCodeOrigem = ex.StatusCode
                 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro inesperado: {Message}", ex.Message);
 
