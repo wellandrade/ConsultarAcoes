@@ -8,6 +8,7 @@ var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient<CotacaoApiClient>();
 builder.ConfigureFunctionsWebApplication();
+
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();

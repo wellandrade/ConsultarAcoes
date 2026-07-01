@@ -8,6 +8,7 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructure();
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
+//builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 app.MapOpenApi();
