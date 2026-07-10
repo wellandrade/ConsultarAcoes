@@ -40,12 +40,12 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
 
                     mensagem = TratarMensagem(cotacao);
 
-                    await _notificacaoService.EnviarMensagem(mensagem);
+                    await _notificacaoService.EnviarMensagem(mensagem, item);
 
                 }
                 catch (Exception ex)
                 {
-                    var teste = ex;
+                    throw new Exception(ex.Message);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(2));
             }
@@ -109,7 +109,8 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
                 "VALE3",
                 "ITSA4",
                 "RANI3",
-                "KEPL3"
+                "KEPL3",
+                "GARE11"
             };
         }
     }

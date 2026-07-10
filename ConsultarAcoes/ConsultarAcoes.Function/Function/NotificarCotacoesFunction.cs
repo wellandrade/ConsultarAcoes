@@ -20,11 +20,11 @@ namespace ConsultarAcoes.Function.Function
         {
             try
             {
-                _logger.LogInformation("Iniciando execução da Function Notificações | NotificarCotacoesFunction11h");
+                _logger.LogInformation("Iniciando execução da Function NotificarCotacoes. Horário: {Horario}", DateTimeOffset.Now);
 
                 await _cotacaoApiClient.NotificarCotacoes();
 
-                _logger.LogInformation("API executada com sucesso | NotificarCotacoesFunction11h");
+                _logger.LogInformation("Execução concluída. Horário: {Horario}", DateTimeOffset.Now);
             }
             catch (Exception ex)
             {
@@ -38,11 +38,11 @@ namespace ConsultarAcoes.Function.Function
         {
             try
             {
-                _logger.LogInformation("Iniciando execução da Function Notificações | NotificarCotacoesFunction15h30");
+                _logger.LogInformation("Iniciando execução da Function NotificarCotacoes. Horário: {Horario}", DateTimeOffset.Now);
 
                 await _cotacaoApiClient.NotificarCotacoes();
 
-                _logger.LogInformation("API executada com sucesso | NotificarCotacoesFunction15h30");
+                _logger.LogInformation("Execução concluída. Horário: {Horario}", DateTimeOffset.Now);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using ConsultarAcoes.Application.Interfaces.Notificacao;
+using Microsoft.Extensions.Options;
 using System.Net.Http.Json;
 
 namespace ConsultarAcoes.Infra.Notificacao
@@ -6,25 +7,27 @@ namespace ConsultarAcoes.Infra.Notificacao
     public class TelegramNotificacaoService : ITelegramNotificacaoService
     {
         private readonly HttpClient _httpClient;
+        private readonly string _urlBase = "https://api.telegram.org/bot";
+        private readonly TelegramOptions _options;
 
-        private const string _token = "8532947811:AAHnJSyrzZhnQRt5iBA4EceQ432BnFzzW4U";
-        private List<string> _listChatIds = new List<string> { "8708594503", "8961141383" };
-
-        public TelegramNotificacaoService()
+        public TelegramNotificacaoService(IOptions<TelegramOptions> options)
         {
             _httpClient = new HttpClient();
+            _options = options.Value;
         }
 
-        public async Task EnviarMensagem(string mensagem)
+        public async Task EnviarMensagem(string mensagem, string sigla = "")
         {
-
-            var url = $"https://api.telegram.org/bot{_token}/sendMessage";
-
-            foreach (var chatId in _listChatIds.Where(x => !string.IsNullOrWhiteSpace(x)))
+            foreach (var destinatario in _options.ListaDestinatarios)
             {
-                await _httpClient.PostAsJsonAsync(url, new
+                if (!string.IsNullOrWhiteSpace(sigla) && destinatario.SiglasBloqueadas.Contains(sigla, StringComparer.OrdinalIgnoreCase))
                 {
-                    chat_id = chatId,
+                    continue;
+                }
+
+                var response = await _httpClient.PostAsJsonAsync($"{_urlBase}{destinatario.Token}/sendMessage", new
+                {
+                    chat_id = destinatario.ChatId,
                     text = mensagem
                 });
             }

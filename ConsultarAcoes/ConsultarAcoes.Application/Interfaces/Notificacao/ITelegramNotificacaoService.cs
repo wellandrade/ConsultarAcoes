@@ -2,6 +2,6 @@
 {
     public interface ITelegramNotificacaoService
     {
-        Task EnviarMensagem(string mensagem);
+        Task EnviarMensagem(string mensagem, string sigla = "");
     }
 }
