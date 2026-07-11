@@ -1,3 +1,4 @@
+using Azure.Identity;
 using ConsultarAcoes.API.Middlewares;
 using ConsultarAcoes.Infra.IoC;
 using ConsultarAcoes.Infra.Notificacao;
@@ -10,6 +11,13 @@ builder.Services.AddControllers();
 builder.Services.AddInfrastructure();
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
+
+var keyValue = builder.Configuration["KeyVault:Url"];
+if (!string.IsNullOrWhiteSpace(keyValue))
+{
+    builder.Configuration.AddAzureKeyVault(new Uri(keyValue), new DefaultAzureCredential());
+}
+
 
 builder.Services.AddOpenTelemetry()
     .WithMetrics(metrics =>

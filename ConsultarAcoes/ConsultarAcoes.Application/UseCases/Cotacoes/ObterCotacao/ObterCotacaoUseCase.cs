@@ -1,6 +1,7 @@
 ﻿using ConsultarAcoes.Application.Interfaces.Notificacao;
 using ConsultarAcoes.Application.Interfaces.Proxies;
 using ConsultarAcoes.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
 {
@@ -8,11 +9,13 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
     {
         private readonly ICotacaoProxy _cotacaoProxy;
         private readonly ITelegramNotificacaoService _notificacaoService;
+        private readonly ILogger<ObterCotacaoUseCase> _logger;
 
-        public ObterCotacaoUseCase(ICotacaoProxy cotacaoProxy, ITelegramNotificacaoService notificacaoService)
+        public ObterCotacaoUseCase(ICotacaoProxy cotacaoProxy, ITelegramNotificacaoService notificacaoService, ILogger<ObterCotacaoUseCase> logger)
         {
             _cotacaoProxy = cotacaoProxy;
             _notificacaoService = notificacaoService;
+            _logger = logger;
         }
 
         public async Task<ObterCotacaoResponse?> Executar(ObterCotacaoRequest request)
@@ -45,7 +48,7 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.Message);
+                    _logger.LogError(ex, "Erro ao processar a cotação para o ticker: {Ticker}", item);
                 }
                 await Task.Delay(TimeSpan.FromSeconds(2));
             }
