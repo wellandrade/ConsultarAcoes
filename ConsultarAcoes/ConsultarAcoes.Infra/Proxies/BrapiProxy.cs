@@ -4,6 +4,7 @@ using ConsultarAcoes.Domain.Entities;
 using ConsultarAcoes.Infra.Response;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using System.Timers;
 
 namespace ConsultarAcoes.Infra.Proxies
 {
@@ -56,6 +57,13 @@ namespace ConsultarAcoes.Infra.Proxies
             {
                 throw new Exception("Erro ao obter cotação.", ex);
             }
+        }
+
+        public Cotacao ObterCotacaoMock(string ticket)
+        {
+            var cotacao = new Cotacao(ticket, 76.28m, 0.25m, 76.34m, 76.93m, 75.24m, DateTime.UtcNow);
+
+            return cotacao;
         }
     }
 }

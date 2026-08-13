@@ -1,4 +1,9 @@
 ﻿namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
 {
-    public record ObterCotacaoRequest();
+    public class ObterCotacaoRequest
+    {
+        public string ticker { get; set; }
+
+        public int quantidade { get; set; }
+    }
 }

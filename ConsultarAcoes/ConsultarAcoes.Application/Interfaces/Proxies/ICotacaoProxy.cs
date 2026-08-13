@@ -5,5 +5,7 @@ namespace ConsultarAcoes.Application.Interfaces.Proxies
     public interface ICotacaoProxy
     {
         public Task<Cotacao?> ObterCotacao(string ticket);
+
+        Cotacao ObterCotacaoMock(string ticket);
     }
 }

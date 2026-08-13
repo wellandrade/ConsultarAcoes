@@ -53,7 +53,7 @@ namespace ConsultarAcoes.API.Middlewares
 
                 await context.Response.WriteAsJsonAsync(new
                 {
-                    erro = "Erro interno."
+                    erro = "Erro interno." + ex.Message
                 });
 
             }
