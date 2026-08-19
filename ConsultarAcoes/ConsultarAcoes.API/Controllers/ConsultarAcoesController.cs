@@ -1,5 +1,6 @@
 ﻿using ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao;
 using ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ConsultarAcoes.API.Controllers
@@ -30,7 +31,7 @@ namespace ConsultarAcoes.API.Controllers
         }
         
         [HttpGet("{ticker}")]
-        public async Task<IActionResult> ObterCotacao([FromRoute]string ticker, [FromQuery] int qtd = 1, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> ObterCotacao([FromRoute] string ticker, [FromQuery] int qtd, [FromHeader(Name = "Idempotency-Key")] string idempotencyKey, CancellationToken cancellationToken = default)
         {
             var request = new ObterCotacaoRequest
             {
@@ -38,12 +39,7 @@ namespace ConsultarAcoes.API.Controllers
                 quantidade = qtd
             };
 
-            var cotacao = await _obterCotacaoUseCase.Executar(request);
-
-            if (cotacao is null)
-            {
-                // return NotFound($"Cotação não encontrada para o ticker: {ticker}");
-            }
+            var cotacao = await _obterCotacaoUseCase.Executar(request, idempotencyKey);
 
             return Ok(cotacao);
         }

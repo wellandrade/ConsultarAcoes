@@ -2,6 +2,6 @@
 {
     public interface IObterCotacaoUseCase
     {
-        Task<ObterCotacaoResponse?> Executar(ObterCotacaoRequest request);
-    }
+        Task<ObterCotacaoResponse?> Executar(ObterCotacaoRequest request, string idempotencyKey);
+    }   
 }

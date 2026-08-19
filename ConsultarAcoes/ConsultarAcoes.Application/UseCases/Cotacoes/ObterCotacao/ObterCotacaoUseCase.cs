@@ -1,51 +1,88 @@
-﻿using ConsultarAcoes.Application.Interfaces.Proxies;
+﻿using ConsultarAcoes.Application.Exceptions;
+using ConsultarAcoes.Application.Interfaces.Idempotencia;
+using ConsultarAcoes.Application.Interfaces.Proxies;
 using ConsultarAcoes.Application.Observabilidade;
 using ConsultarAcoes.Domain.Entities;
+using System.Diagnostics;
 
 namespace ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao
 {
     public class ObterCotacaoUseCase : IObterCotacaoUseCase
     {
         private readonly ICotacaoProxy _cotacaoProxy;
+        private readonly IIdempotenciaService _idempotencyService;
 
-        public ObterCotacaoUseCase(ICotacaoProxy cotacaoProxy)
+        public ObterCotacaoUseCase(ICotacaoProxy cotacaoProxy, IIdempotenciaService idempotencyService)
         {
             _cotacaoProxy = cotacaoProxy;
+            _idempotencyService = idempotencyService;
         }
 
-        public async Task<ObterCotacaoResponse?> Executar(ObterCotacaoRequest request)
+        public async Task<ObterCotacaoResponse?> Executar(ObterCotacaoRequest request, string idempotencyKey)
         {
             using var activity = TracingHelper.IniciarSpan("ObterCotacaoUseCase.Executar", ("ticker", request.ticker), ("quantidade", request.quantidade));
 
-            try
+            if (_idempotencyService.TryGet<ObterCotacaoResponse>(idempotencyKey, out var resultadoAnterior))
             {
-                var cotacao = (Cotacao?)null;
+                activity?.SetTag("idempotency.hit", true);
+                return resultadoAnterior;
+            }
 
-                for (int i = 0; i < request.quantidade; i++)
+            Thread.Sleep(5000); // Simula um atraso de 1 segundo para demonstrar a idempotência
+
+            activity?.SetTag("idempotency.hit", false);
+
+            var qtdSucesso = 0;
+            var qtdErro = 0;
+
+            var cotacao = (Cotacao?)null;
+
+            for (int i = 0; i < request.quantidade; i++)
+            {
+                try
                 {
                     if (Random.Shared.Next(1, 100) == 1)
                     {
-                        throw new Exception("Erro ao obter cotação");
+                        throw new CotacaoNaoEncontradaException(request.ticker);
                     }
 
                     cotacao = _cotacaoProxy.ObterCotacaoMock(request.ticker);
+                    qtdSucesso++;
                 }
-
-                if (cotacao is null)
+                catch (CotacaoNaoEncontradaException ex)
                 {
-                    return null;
+                    qtdErro++;
+                    AdicionarEventoErro(activity, "Cotação não encontrada", request.ticker, ex);
                 }
-
-                return new ObterCotacaoResponse(request.ticker, cotacao.CotacaoAtual, cotacao.VariacaoPercentual, cotacao.FechamentoAnterior, cotacao.MaximaDia, cotacao.MinimaDia, cotacao.DataAtualizacao);
-
+                catch(Exception ex)
+                {
+                    qtdErro++;
+                    AdicionarEventoErro(activity, "Erro inesperado", request.ticker, ex);
+                }
             }
-            catch (Exception ex)
+
+            activity?.SetTag("sucesso", qtdSucesso);
+            activity?.SetTag("erro", qtdErro);
+
+            if (cotacao is null)
             {
-                activity?.SetStatus(System.Diagnostics.ActivityStatusCode.Error, ex.Message);
-                activity?.AddException(ex);
-
-                throw;
+                return null;
             }
+
+            var response = new ObterCotacaoResponse(request.ticker, cotacao.CotacaoAtual, cotacao.VariacaoPercentual, cotacao.FechamentoAnterior, cotacao.MaximaDia, cotacao.MinimaDia, cotacao.DataAtualizacao);
+
+            _idempotencyService.Set(idempotencyKey, response);
+
+            return response;
+        }
+
+        private static void AdicionarEventoErro(Activity? activity, string nomeEvento, string ticker, Exception ex)
+        {
+            activity?.AddEvent(new ActivityEvent(nomeEvento, tags: new ActivityTagsCollection
+            {
+                ["ticker"] = ticker,
+                ["erro"] = ex.Message
+            }));
         }
     }
 }
