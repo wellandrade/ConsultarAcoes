@@ -22,14 +22,9 @@ namespace ConsultarAcoes.API.Controllers
         {
             var cotacao = await _notificarCotacaoUseCase.Executar();
 
-            if (cotacao is null)
-            {
-                // return NotFound($"Cotação não encontrada para o ticker: {ticker}");
-            }
-
             return Ok(cotacao);
         }
-        
+
         [HttpGet("{ticker}")]
         public async Task<IActionResult> ObterCotacao([FromRoute] string ticker, [FromQuery] int qtd, [FromHeader(Name = "Idempotency-Key")] string idempotencyKey, CancellationToken cancellationToken = default)
         {
@@ -43,5 +38,40 @@ namespace ConsultarAcoes.API.Controllers
 
             return Ok(cotacao);
         }
+
+        [HttpGet("Instancia")]
+        public IActionResult Instancia()
+        {
+            return Ok(new
+            {
+                Machine = Environment.MachineName,
+                Data = DateTime.UtcNow
+            });
+        }
+
+        private static readonly List<string> _tickers = new List<string>();
+
+        [HttpPost("memoria/{ticker}")]
+        public async Task<IActionResult> AdicionarTicker(string ticker)
+        {
+            _tickers.Add(ticker);
+
+            return Ok(new
+            {
+                Machine = Environment.MachineName,
+                Tickers = _tickers
+            });
+        }
+
+        [HttpGet("memoria")]
+        public async Task<IActionResult> ObterTickers()
+        {
+            return Ok(new
+            {
+                Machine = Environment.MachineName,
+                Tickers = _tickers
+            });
+        }
+
     }
 }

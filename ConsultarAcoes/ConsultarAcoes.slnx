@@ -3,5 +3,9 @@
   <Project Path="ConsultarAcoes.Application/ConsultarAcoes.Application.csproj" />
   <Project Path="ConsultarAcoes.Function/ConsultarAcoes.Function.csproj" Id="0146619b-ac32-4db8-afd3-69350d47adf4" />
   <Project Path="ConsultarAcoes.Infra/ConsultarAcoes.Infra.csproj" />
+  <Project Path="ConsultarAcoes.Worker.DLQ/ConsultarAcoes.Worker.DLQ.csproj" Id="fa30e367-a4ee-4f61-85a0-563f1e4f7fc8" />
+  <Project Path="ConsultarAcoes.Worker.Session/ConsultarAcoes.Worker.Session.csproj" Id="584466e7-d505-466c-beff-63d183bd4576" />
+  <Project Path="ConsultarAcoes.Worker.TopicSubscription/ConsultarAcoes.Worker.TopicSubscription.csproj" Id="7707b390-92af-4211-8359-d3bd8fef4fd3" />
+  <Project Path="ConsultarAcoes.Worker/ConsultarAcoes.Worker.csproj" Id="af09b47c-e350-47bd-9925-3b6aa6fe25ea" />
   <Project Path="src/ConsultarAcoes.Domain/ConsultarAcoes.Domain.csproj" />
 </Solution>

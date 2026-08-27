@@ -1,4 +1,6 @@
-﻿using ConsultarAcoes.Application.Interfaces.Notificacao;
+﻿using ConsultarAcoes.Application.DTO;
+using ConsultarAcoes.Application.Interfaces.Messageria.IMessagePubliser;
+using ConsultarAcoes.Application.Interfaces.Notificacao;
 using ConsultarAcoes.Application.Interfaces.Proxies;
 using ConsultarAcoes.Application.UseCases.Cotacoes.ObterCotacao;
 using ConsultarAcoes.Domain.Entities;
@@ -11,12 +13,18 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
         private readonly ICotacaoProxy _cotacaoProxy;
         private readonly ITelegramNotificacaoService _notificacaoService;
         private readonly ILogger<NotificarCotacaoUseCase> _logger;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public NotificarCotacaoUseCase(ICotacaoProxy cotacaoProxy, ITelegramNotificacaoService notificacaoService, ILogger<NotificarCotacaoUseCase> logger)
+        private bool _validarEnvioDeMensagemDuplicada = false;
+        private bool _validarEnvioDeMensagemPorOrdem = false;
+
+        public NotificarCotacaoUseCase(ICotacaoProxy cotacaoProxy, ITelegramNotificacaoService notificacaoService, ILogger<NotificarCotacaoUseCase> logger,
+            IMessagePublisher messagePublisher)
         {
             _cotacaoProxy = cotacaoProxy;
             _notificacaoService = notificacaoService;
             _logger = logger;
+            _messagePublisher = messagePublisher;
         }
 
         public async Task<NotificarCotacaoResponse?> Executar()
@@ -31,11 +39,20 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
             var cotacao = (Cotacao)null;
             var mensagem = "";
 
+            var messageId = "";
+            var correlationId = "";
+            var cotacaoConsultada = (CotacaoConsultada)null;
+            string? sessionId = "";
+
             foreach (var item in listaTickers)
             {
                 try
                 {
+                    _logger.LogInformation("Iniciando a consulta da cotação. Ticker : {Ticker}", item);
+
                     cotacao = await _cotacaoProxy.ObterCotacao(item);
+
+                    _logger.LogInformation("Cotação consultada com sucesso. Ticker: {Ticker} | Valor: {Valor }", item, cotacao?.CotacaoAtual);
 
                     if (cotacao is null)
                     {
@@ -44,14 +61,30 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
 
                     mensagem = TratarMensagem(cotacao);
 
+                    //TODO: para estudo, nao chamar no telegram, mas popular fila de mensagem
                     await _notificacaoService.EnviarMensagem(mensagem, item);
+
+                    //correlationId = Guid.NewGuid().ToString();
+                    //messageId = Guid.NewGuid().ToString();
+
+                    //if (_validarEnvioDeMensagemDuplicada)
+                    //{
+                    //    messageId = "Teste-1234";
+                    //}
+
+                    //if (_validarEnvioDeMensagemPorOrdem)
+                    //{
+                    //    sessionId = item;
+                    //}
+
+                    //cotacaoConsultada = new CotacaoConsultada(item, mensagem, DateTime.UtcNow);
+                    //await _messagePublisher.PublishAsync(cotacaoConsultada, messageId, correlationId, sessionId);
 
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Erro ao processar a cotação para o ticker: {Ticker}", item);
                 }
-                await Task.Delay(TimeSpan.FromSeconds(2));
             }
 
             await _notificacaoService.EnviarMensagem("Todas as cotações foram processadas.");
@@ -92,9 +125,9 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
                 case <= -2:
                     return "⚠️ QUEDA RELEVANTE";
                 case >= 3:
-                    return "🔥 ALTA FORTE";      
+                    return "🔥 ALTA FORTE";
                 case >= 2:
-                    return "✅ ALTA RELEVANTE";  
+                    return "✅ ALTA RELEVANTE";
                 default:
                     return "📈 COTAÇÃO";
             }

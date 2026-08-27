@@ -1,3 +1,5 @@
+using Azure.Messaging.ServiceBus;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using ConsultarAcoes.API.Middlewares;
 using ConsultarAcoes.Application.Observabilidade;
 using ConsultarAcoes.Infra.IoC;
@@ -20,7 +22,7 @@ builder.Services.AddHealthChecks();
 //    builder.Configuration.AddAzureKeyVault(new Uri(keyValue), new DefaultAzureCredential());
 //}
 
-builder.Services.AddOpenTelemetry()
+var openTelemetry = builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource =>
     {
         resource.AddService("ConsultarAcoes.API");
@@ -38,14 +40,22 @@ builder.Services.AddOpenTelemetry()
         tracing
             .AddSource(Observabilidade.NomeFonte)
             .AddAspNetCoreInstrumentation()
-            .AddHttpClientInstrumentation()
-            .AddOtlpExporter(options =>
+            .AddHttpClientInstrumentation();
+
+
+        if (builder.Environment.IsDevelopment())
+        {
+            tracing.AddOtlpExporter(options =>
             {
                 options.Endpoint = new Uri("http://localhost:4317");
             });
+        }
     });
 
 builder.Logging.ClearProviders();
+
+openTelemetry.UseAzureMonitor();
+
 builder.Logging.AddSimpleConsole(options =>
 {
     options.IncludeScopes = true;
@@ -55,6 +65,15 @@ builder.Logging.AddSimpleConsole(options =>
 
 builder.Services.Configure<TelegramOptions>(builder.Configuration.GetSection("Telegram"));
 
+builder.Services.AddSingleton(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    var connectionString = configuration["AzureServiceBus:ConnectionString"];
+
+    return new ServiceBusClient(connectionString);
+});
+
+
 var app = builder.Build();
 
 app.MapOpenApi();
@@ -63,7 +82,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 app.UseMiddleware<TraceLogginsMiddleware>();
 
 app.MapHealthChecks("/health");
-app.MapPrometheusScrapingEndpoint("/metrics");
+// app.MapPrometheusScrapingEndpoint("/metrics");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
