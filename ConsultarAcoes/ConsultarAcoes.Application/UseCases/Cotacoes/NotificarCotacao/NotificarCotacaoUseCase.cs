@@ -64,8 +64,8 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
                     //TODO: para estudo, nao chamar no telegram, mas popular fila de mensagem
                     await _notificacaoService.EnviarMensagem(mensagem, item);
 
-                    //correlationId = Guid.NewGuid().ToString();
-                    //messageId = Guid.NewGuid().ToString();
+                    correlationId = Guid.NewGuid().ToString();
+                    messageId = Guid.NewGuid().ToString();
 
                     //if (_validarEnvioDeMensagemDuplicada)
                     //{
@@ -77,8 +77,8 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
                     //    sessionId = item;
                     //}
 
-                    //cotacaoConsultada = new CotacaoConsultada(item, mensagem, DateTime.UtcNow);
-                    //await _messagePublisher.PublishAsync(cotacaoConsultada, messageId, correlationId, sessionId);
+                    cotacaoConsultada = new CotacaoConsultada(item, mensagem, DateTime.UtcNow);
+                    await _messagePublisher.PublishAsync(cotacaoConsultada, messageId, correlationId, sessionId);
 
                 }
                 catch (Exception ex)
