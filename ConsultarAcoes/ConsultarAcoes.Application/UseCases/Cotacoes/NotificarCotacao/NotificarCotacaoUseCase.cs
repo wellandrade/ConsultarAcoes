@@ -50,7 +50,7 @@ namespace ConsultarAcoes.Application.UseCases.Cotacoes.NotificarCotacao
                 {
                     _logger.LogInformation("Iniciando a consulta da cotação. Ticker : {Ticker}", item);
 
-                    cotacao = await _cotacaoProxy.ObterCotacao(item);
+                    cotacao = _cotacaoProxy.ObterCotacaoMock(item);
 
                     _logger.LogInformation("Cotação consultada com sucesso. Ticker: {Ticker} | Valor: {Valor }", item, cotacao?.CotacaoAtual);
 
